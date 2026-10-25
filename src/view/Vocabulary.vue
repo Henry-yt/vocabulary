@@ -1,99 +1,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, watch} from "vue";
 import Clipboard from 'clipboard';
-
-
-const VOCABULARY_IMPORTS = {
-    '基础词汇': {
-        '初中词汇': () => import('../vocabulary/json/1-初中-顺序.json'),
-        '高中词汇': () => import('../vocabulary/json/2-高中-顺序.json'),
-        '四级词汇': () => import('../vocabulary/json/3-CET4-顺序.json'),
-        '六级词汇': () => import('../vocabulary/json/4-CET6-顺序.json'),
-        '考研词汇': () => import('../vocabulary/json/5-考研-顺序.json'),
-        '托福词汇': () => import('../vocabulary/json/6-托福-顺序.json'),
-        'SAT词汇': () => import('../vocabulary/json/7-SAT-顺序.json'),
-    },
-    '小学词汇': {
-        '人教版小学三年级上册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue3_1.json'),
-        '人教版小学三年级下册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue3_2.json'),
-        '人教版小学四年级上册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue4_1.json'),
-        '人教版小学四年级下册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue4_2.json'),
-        '人教版小学五年级上册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue5_1.json'),
-        '人教版小学五年级下册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue5_2.json'),
-        '人教版小学六年级上册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue6_1.json'),
-        '人教版小学六年级下册': () => import('../vocabulary/json_original/json-sentence/PEPXiaoXue6_2.json'),
-    },
-    '初中词汇': {
-        '人教版初中七年级上册': () => import('../vocabulary/json_original/json-sentence/PEPChuZhong7_1.json'),
-        '人教版初中七年级下册': () => import('../vocabulary/json_original/json-sentence/PEPChuZhong7_2.json'),
-        '人教版初中八年级上册': () => import('../vocabulary/json_original/json-sentence/PEPChuZhong8_1.json'),
-        '人教版初中八年级下册': () => import('../vocabulary/json_original/json-sentence/PEPChuZhong8_2.json'),
-        '人教版初中九年级': () => import('../vocabulary/json_original/json-sentence/PEPChuZhong9_1.json'),
-        '外研社初中一年级': () => import('../vocabulary/json_original/json-sentence/WaiYanSheChuZhong_1.json'),
-        '外研社初中二年级': () => import('../vocabulary/json_original/json-sentence/WaiYanSheChuZhong_2.json'),
-        '外研社初中三年级': () => import('../vocabulary/json_original/json-sentence/WaiYanSheChuZhong_3.json'),
-        '外研社初中四年级': () => import('../vocabulary/json_original/json-sentence/WaiYanSheChuZhong_4.json'),
-        '外研社初中五年级': () => import('../vocabulary/json_original/json-sentence/WaiYanSheChuZhong_5.json'),
-        '外研社初中六年级': () => import('../vocabulary/json_original/json-sentence/WaiYanSheChuZhong_6.json'),
-    },
-    '高中词汇': {
-        '人教版高中必修1': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_1.json'),
-        '人教版高中必修2': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_2.json'),
-        '人教版高中必修3': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_3.json'),
-        '人教版高中必修4': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_4.json'),
-        '人教版高中必修5': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_5.json'),
-        '人教版高中选修6': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_6.json'),
-        '人教版高中选修7': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_7.json'),
-        '人教版高中选修8': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_8.json'),
-        '人教版高中选修9': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_9.json'),
-        '人教版高中选修10': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_10.json'),
-        '人教版高中选修11': () => import('../vocabulary/json_original/json-sentence/PEPGaoZhong_11.json'),
-        '北师大版高中必修1': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_1.json'),
-        '北师大版高中必修2': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_2.json'),
-        '北师大版高中必修3': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_3.json'),
-        '北师大版高中必修4': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_4.json'),
-        '北师大版高中必修5': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_5.json'),
-        '北师大版高中选修6': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_6.json'),
-        '北师大版高中选修7': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_7.json'),
-        '北师大版高中选修8': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_8.json'),
-        '北师大版高中选修9': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_9.json'),
-        '北师大版高中选修10': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_10.json'),
-        '北师大版高中选修11': () => import('../vocabulary/json_original/json-sentence/BeiShiGaoZhong_11.json'),
-    },
-    '大学词汇': {
-        '四级真题核心词': () => import('../vocabulary/json_original/json-sentence/CET4_1.json'),
-        '四级英语词汇': () => import('../vocabulary/json_original/json-sentence/CET4_2.json'),
-        '六级真题核心词': () => import('../vocabulary/json_original/json-sentence/CET6_1.json'),
-        '六级英语词汇': () => import('../vocabulary/json_original/json-sentence/CET6_2.json'),
-        '考研必考词汇': () => import('../vocabulary/json_original/json-sentence/KaoYan_1.json'),
-        '考研英语词汇': () => import('../vocabulary/json_original/json-sentence/KaoYan_2.json'),
-    },
-    '国际考试': {
-        'TOEFL词汇': () => import('../vocabulary/json_original/json-sentence/TOEFL_2.json'),
-        '雅思词汇': () => import('../vocabulary/json_original/json-sentence/IELTS_2.json'),
-        'SAT词汇': () => import('../vocabulary/json_original/json-sentence/SAT_2.json'),
-        'GRE词汇': () => import('../vocabulary/json_original/json-sentence/GRE_2.json'),
-        'GMAT词汇': () => import('../vocabulary/json_original/json-sentence/GMAT_2.json'),
-        '商务英语词汇': () => import('../vocabulary/json_original/json-sentence/BEC_2.json'),
-        '专四核心词汇-1': () => import('../vocabulary/json_original/json-sentence/Level4_1.json'),
-        '专四核心词汇-2': () => import('../vocabulary/json_original/json-sentence/Level4_2.json'),
-        '专八核心词汇-1': () => import('../vocabulary/json_original/json-sentence/Level8_1.json'),
-        '专八核心词汇-2': () => import('../vocabulary/json_original/json-sentence/Level8_2.json'),
-    },
-    '新东方': {
-        '初中词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/ChuZhong_3.json'),
-        '高中词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/GaoZhong_3.json'),
-        '四级词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/CET4_3.json'),
-        '六级词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/CET6_3.json'),
-        '考研词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/KaoYan_3.json'),
-        'TOEFL词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/TOEFL_3.json'),
-        '雅思词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/IELTS_3.json'),
-        'SAT词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/SAT_3.json'),
-        'GRE词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/GRE_3.json'),
-        'GMAT词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/GMAT_3.json'),
-        'BEC词汇（新东方）': () => import('../vocabulary/json_original/json-sentence/BEC_3.json'),
-    }
-}
+import {VOCABULARY_IMPORTS, loadVocabularyList} from "../vocabularyMap";
 
 const KEY_LOCALSTORAGE_KNOWN = "known_words"
 const KEY_LOCALSTORAGE_UNCERTAIN = "uncertain_words"
@@ -143,14 +51,7 @@ function speakWord(word: string) {
 }
 
 async function loadVocabulary(name: string) {
-    // Find the group and module that contains the selected vocabulary
-    for (const group of Object.values(VOCABULARY_IMPORTS)) {
-        if (name in group) {
-            const module = await group[name]()
-            currentVocabulary.value = module.default
-            return
-        }
-    }
+    currentVocabulary.value = await loadVocabularyList(name)
 }
 
 // Add a ref to track if the Ctrl key is pressed and active word
@@ -277,7 +178,7 @@ function handleWordHover(word: string) {
 }
 
 // Update handleWordClick to accept event and check isSlashPressed
-function handleWordClick(word: string, event?: MouseEvent) {
+function handleWordClick(word: string) {
     speakWord(word);
     if (isSlashPressed.value) {
         if (knownWordsSet.value.has(word)) {
@@ -396,6 +297,10 @@ async function importConfigFromClipboard() {
                 <button @click="exportConfigToClipboard" class="btn btn-secondary btn-sm">导出配置</button>
                 <button @click="reloadPage" class="btn btn-warning btn-sm">刷新布局</button>
             </div>
+
+            <div class="story-entry">
+                <RouterLink class="story-link" to="/story">每日短文 → 用不会的单词生成短文学习</RouterLink>
+            </div>
         </div>
 
 
@@ -419,7 +324,7 @@ async function importConfigFromClipboard() {
                 {known: knownWordsSet.has(item.word)},
                 {uncertain: uncertainWordsSet.has(item.word)},
             ]"
-             @click="handleWordClick(item.word, $event)"
+             @click="handleWordClick(item.word)"
              @contextmenu.prevent="(e) => { activeWord = item.word; calculatePanelPosition(e); }"
              @mouseenter="handleWordHover(item.word)"
              v-for="item in wordsRandom"

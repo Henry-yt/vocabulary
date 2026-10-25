@@ -1,6 +1,6 @@
-import {CategoryEntity} from "./entity/Category";
-import {AuthorizationEntity} from "./entity/Authorization";
-import {BillKey} from "./view/Bill/Bill";
+import type {CategoryEntity} from "./entity/Category";
+import type {AuthorizationEntity} from "./entity/Authorization";
+import type {BillKey} from "./view/Bill/Bill";
 
 const AUTHORIZATION_NAME = 'Authorization' // 存储用户信息的 localStorage name，跟 Manager 通用
 const BILL_KEYS_NAME = 'BillKeys'
@@ -130,7 +130,7 @@ enum EnumWeekDayShort {
 
 // 格式化时间，输出字符串
 function dateFormatter(date: Date, formatString: string = 'yyyy-MM-dd hh:mm:ss') {
-    let dateRegArray: Object = {
+    let dateRegArray: Record<string, number> = {
         "M+": date.getMonth() + 1,                      // 月份
         "d+": date.getDate(),                           // 日
         "h+": date.getHours(),                          // 小时
@@ -144,7 +144,7 @@ function dateFormatter(date: Date, formatString: string = 'yyyy-MM-dd hh:mm:ss')
     }
     for (let section in dateRegArray) {
         if (new RegExp("(" + section + ")").test(formatString)) {
-            formatString = formatString.replace(RegExp.$1, (RegExp.$1.length === 1) ? (dateRegArray[section]) : (("00" + dateRegArray[section]).substr(("" + dateRegArray[section]).length)))
+            formatString = formatString.replace(RegExp.$1, (RegExp.$1.length === 1) ? String(dateRegArray[section]) : (("00" + dateRegArray[section]).substr(("" + dateRegArray[section]).length)))
         }
     }
     return formatString

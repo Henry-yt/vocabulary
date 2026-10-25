@@ -2,6 +2,8 @@
 
 # 蚕食单词
 
+> 本项目基于 [KyleBing/vocabulary](https://github.com/KyleBing/vocabulary) 修改，新增「每日短文」功能（用不会的单词生成短文学习）。仅供个人学习使用。
+
 ![image](https://github.com/user-attachments/assets/370feef1-2071-42ed-9cb0-fb4db0dfc5c5)
 
 
